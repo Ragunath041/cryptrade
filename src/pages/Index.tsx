@@ -20,7 +20,7 @@ const Index: React.FC = () => {
         <MarketOverview />
         <FeaturesSection />
       </main>
-      <Footer />
+      {/* <Footer /> */}
     </div>
   );
 };

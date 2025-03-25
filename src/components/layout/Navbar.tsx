@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from "react";
-import { Link, useLocation } from "react-router-dom";
-import { Menu, X, Moon, Sun } from "lucide-react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { ThemeToggle } from "@/components/shared/ThemeToggle";
 
 const Navbar: React.FC = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -24,6 +26,38 @@ const Navbar: React.FC = () => {
     // Close menu when route changes
     setIsMenuOpen(false);
   }, [location]);
+
+  const handleNavigation = (path: string) => {
+    if (path === "/market") {
+      if (location.pathname !== "/") {
+        navigate("/");
+        // Wait for navigation to complete before scrolling
+        setTimeout(() => {
+          const marketSection = document.getElementById("market");
+          if (marketSection) {
+            marketSection.scrollIntoView({ behavior: "smooth" });
+          }
+        }, 100);
+      } else {
+        const marketSection = document.getElementById("market");
+        if (marketSection) {
+          marketSection.scrollIntoView({ behavior: "smooth" });
+        }
+      }
+    } else if (path === "/") {
+      if (location.pathname === "/") {
+        // If already on home page, scroll to top smoothly
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      } else {
+        // If on another page, navigate to home and scroll to top
+        navigate("/");
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+    } else {
+      navigate(path);
+    }
+    setIsMenuOpen(false);
+  };
 
   const navItems = [
     { label: "Home", path: "/" },
@@ -52,9 +86,9 @@ const Navbar: React.FC = () => {
         {/* Desktop Navigation */}
         <nav className="hidden md:flex items-center gap-6">
           {navItems.map((item) => (
-            <Link
+            <button
               key={item.path}
-              to={item.path}
+              onClick={() => handleNavigation(item.path)}
               className={`text-sm font-medium transition-all duration-200 hover:text-primary ${
                 location.pathname === item.path
                   ? "text-primary"
@@ -62,21 +96,18 @@ const Navbar: React.FC = () => {
               }`}
             >
               {item.label}
-            </Link>
+            </button>
           ))}
         </nav>
 
         <div className="hidden md:flex items-center gap-4">
+          <ThemeToggle />
           <Button 
             variant="outline"
             className="rounded-full px-6 transition-all duration-300 border-primary/20 hover:border-primary/80 backdrop-blur-sm"
+            onClick={() => navigate("/auth")}
           >
             Sign In
-          </Button>
-          <Button 
-            className="rounded-full px-6 bg-primary/90 hover:bg-primary transition-all duration-300 text-primary-foreground shadow-sm"
-          >
-            Get Started
           </Button>
         </div>
 
@@ -100,30 +131,29 @@ const Navbar: React.FC = () => {
           <div className="container mx-auto px-4 py-6 flex flex-col gap-6">
             <nav className="flex flex-col gap-4">
               {navItems.map((item) => (
-                <Link
+                <button
                   key={item.path}
-                  to={item.path}
-                  className={`text-lg font-medium py-2 transition-all duration-200 hover:text-primary ${
+                  onClick={() => handleNavigation(item.path)}
+                  className={`text-lg font-medium py-2 text-left transition-all duration-200 hover:text-primary ${
                     location.pathname === item.path
                       ? "text-primary"
                       : "text-muted-foreground"
                   }`}
                 >
                   {item.label}
-                </Link>
+                </button>
               ))}
             </nav>
             <div className="flex flex-col gap-3 mt-4">
+              <div className="flex justify-center mb-2">
+                <ThemeToggle />
+              </div>
               <Button 
                 variant="outline"
                 className="w-full rounded-full py-6 transition-all duration-300 border-primary/20 hover:border-primary/80"
+                onClick={() => navigate("/auth")}
               >
                 Sign In
-              </Button>
-              <Button 
-                className="w-full rounded-full py-6 bg-primary/90 hover:bg-primary transition-all duration-300 text-primary-foreground"
-              >
-                Get Started
               </Button>
             </div>
           </div>

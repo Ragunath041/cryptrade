@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Search, ArrowUp, ArrowDown } from "lucide-react";
+import { Search, ArrowUp, ArrowDown, ArrowRight } from "lucide-react";
 import { API } from "@/lib/api";
 import { Coin } from "@/lib/types";
 import { Button } from "@/components/ui/button";
@@ -49,7 +49,7 @@ const MarketOverview: React.FC = () => {
   const topLoser = [...marketStats.losers].sort((a, b) => a.change24h - b.change24h)[0];
 
   return (
-    <section className="py-20 md:py-32 bg-secondary/50 relative">
+    <section id="market" className="py-20 md:py-32 bg-secondary/50 relative">
       <div className="container mx-auto px-4 md:px-6">
         <div className="text-center mb-12">
           <h2 className="text-3xl md:text-4xl font-bold mb-4">Market Overview</h2>
