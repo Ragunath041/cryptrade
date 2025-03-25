@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Menu, X, Moon, Sun } from "lucide-react";
@@ -46,8 +45,8 @@ const Navbar: React.FC = () => {
           to="/" 
           className="flex items-center gap-2 text-xl md:text-2xl font-bold"
         >
-          <span className="text-primary animate-pulse-soft">CoinSwap</span>
-          <span className="text-muted-foreground text-sm font-normal">hub</span>
+          <span className="text-primary animate-pulse-soft">Cryp</span>
+          <span className="text-muted-foreground text-sm font-normal">Trade</span>
         </Link>
 
         {/* Desktop Navigation */}

@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Search, ArrowUp, ArrowDown } from "lucide-react";
@@ -136,7 +135,8 @@ const MarketOverview: React.FC = () => {
                 <CoinCard
                   key={coin.id}
                   coin={coin}
-                  className={`coin-animation-delay-${(index % 5) + 1} animate-fade-in opacity-0`}
+                  className="animate-fade-in"
+                  style={{ animationDelay: `${index * 0.1}s` }}
                 />
               ))}
             </div>

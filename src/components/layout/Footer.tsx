@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Link } from "react-router-dom";
 import { Facebook, Twitter, Instagram, Linkedin, Github } from "lucide-react";
@@ -10,8 +9,8 @@ const Footer: React.FC = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 mb-16">
           <div className="space-y-4">
             <Link to="/" className="flex items-center gap-2 text-xl font-bold mb-6">
-              <span className="text-primary">CoinSwap</span>
-              <span className="text-muted-foreground text-sm font-normal">hub</span>
+              <span className="text-primary">Cryp</span>
+              <span className="text-muted-foreground text-sm font-normal">Trade</span>
             </Link>
             <p className="text-muted-foreground text-sm leading-relaxed">
               A premium cryptocurrency trading platform that offers a seamless and secure trading
@@ -88,7 +87,7 @@ const Footer: React.FC = () => {
 
         <div className="border-t border-border pt-8 text-center">
           <p className="text-muted-foreground text-sm">
-            © {new Date().getFullYear()} CoinSwap Hub. All rights reserved.
+            © {new Date().getFullYear()} CrypTrade. All rights reserved.
           </p>
         </div>
       </div>
