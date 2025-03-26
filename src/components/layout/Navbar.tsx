@@ -1,14 +1,46 @@
 import React, { useState, useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { Menu, X } from "lucide-react";
+import { Menu, X, User, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/shared/ThemeToggle";
+import { authService } from "@/lib/http";
+import { 
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger
+} from "@/components/ui/dropdown-menu";
 
 const Navbar: React.FC = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [username, setUsername] = useState("");
   const location = useLocation();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    // Check authentication status
+    const checkAuth = () => {
+      const isAuth = authService.isAuthenticated();
+      setIsAuthenticated(isAuth);
+      
+      if (isAuth) {
+        const user = authService.getCurrentUser();
+        setUsername(user.username || "User");
+      }
+    };
+    
+    checkAuth();
+    
+    // Listen for authentication state changes
+    window.addEventListener("auth-change", checkAuth);
+    
+    return () => {
+      window.removeEventListener("auth-change", checkAuth);
+    };
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -59,6 +91,10 @@ const Navbar: React.FC = () => {
     setIsMenuOpen(false);
   };
 
+  const handleLogout = () => {
+    authService.logout();
+  };
+
   const navItems = [
     { label: "Home", path: "/" },
     { label: "Market", path: "/market" },
@@ -102,13 +138,38 @@ const Navbar: React.FC = () => {
 
         <div className="hidden md:flex items-center gap-4">
           <ThemeToggle />
-          <Button 
-            variant="outline"
-            className="rounded-full px-6 transition-all duration-300 border-primary/20 hover:border-primary/80 backdrop-blur-sm"
-            onClick={() => navigate("/auth")}
-          >
-            Sign In
-          </Button>
+          
+          {isAuthenticated ? (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button 
+                  variant="outline"
+                  className="rounded-full px-4 py-2 transition-all duration-300 border-primary/20 hover:border-primary/80 backdrop-blur-sm"
+                >
+                  <User className="h-4 w-4 mr-2" />
+                  {username}
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-56">
+                <DropdownMenuItem onClick={() => navigate("/dashboard")}>
+                  Dashboard
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onClick={handleLogout} className="text-red-500">
+                  <LogOut className="h-4 w-4 mr-2" />
+                  Logout
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          ) : (
+            <Button 
+              variant="outline"
+              className="rounded-full px-6 transition-all duration-300 border-primary/20 hover:border-primary/80 backdrop-blur-sm"
+              onClick={() => navigate("/auth")}
+            >
+              Sign In
+            </Button>
+          )}
         </div>
 
         {/* Mobile Menu Button */}
@@ -148,13 +209,35 @@ const Navbar: React.FC = () => {
               <div className="flex justify-center mb-2">
                 <ThemeToggle />
               </div>
-              <Button 
-                variant="outline"
-                className="w-full rounded-full py-6 transition-all duration-300 border-primary/20 hover:border-primary/80"
-                onClick={() => navigate("/auth")}
-              >
-                Sign In
-              </Button>
+              
+              {isAuthenticated ? (
+                <>
+                  <Button 
+                    variant="outline"
+                    className="w-full rounded-full py-6 transition-all duration-300 border-primary/20 hover:border-primary/80"
+                    onClick={() => navigate("/dashboard")}
+                  >
+                    <User className="h-4 w-4 mr-2" />
+                    Dashboard
+                  </Button>
+                  <Button 
+                    variant="outline"
+                    className="w-full rounded-full py-6 transition-all duration-300 border-red-500/20 hover:border-red-500 text-red-500"
+                    onClick={handleLogout}
+                  >
+                    <LogOut className="h-4 w-4 mr-2" />
+                    Logout
+                  </Button>
+                </>
+              ) : (
+                <Button 
+                  variant="outline"
+                  className="w-full rounded-full py-6 transition-all duration-300 border-primary/20 hover:border-primary/80"
+                  onClick={() => navigate("/auth")}
+                >
+                  Sign In
+                </Button>
+              )}
             </div>
           </div>
         </div>

@@ -1,8 +1,7 @@
-
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { PieChart, Pie, ResponsiveContainer, Cell, BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid } from "recharts";
-import { Wallet, TrendingUp, TrendingDown, DollarSign, Clock, ArrowRight, AlertCircle, ExternalLink } from "lucide-react";
+import { Wallet, TrendingUp, TrendingDown, DollarSign, Clock, ArrowRight, AlertCircle, ExternalLink, LogOut } from "lucide-react";
 import { API } from "@/lib/api";
 import { UserProfile, PortfolioAsset } from "@/lib/types";
 import Navbar from "@/components/layout/Navbar";
@@ -11,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { GlassCard } from "@/components/ui/glass-card";
 import { useToast } from "@/hooks/use-toast";
+import { authService } from "@/lib/http";
 
 const Dashboard: React.FC = () => {
   const [user, setUser] = useState<UserProfile | null>(null);
@@ -22,8 +22,18 @@ const Dashboard: React.FC = () => {
     const fetchUserData = async () => {
       setIsLoading(true);
       try {
-        const userData = await API.getUserProfile();
-        setUser(userData);
+        // Get current user from localStorage
+        const userData = authService.getCurrentUser();
+        // For now, we'll use mock data for the portfolio
+        const mockUserData = await API.getUserProfile();
+        
+        // Combine real user data with mock portfolio data
+        setUser({
+          ...mockUserData,
+          name: userData.username || mockUserData.name,
+          email: userData.email || mockUserData.email,
+          id: userData.id || mockUserData.id
+        });
       } catch (error) {
         console.error("Error fetching user data:", error);
         toast({
@@ -40,6 +50,14 @@ const Dashboard: React.FC = () => {
     // Scroll to top when component mounts
     window.scrollTo(0, 0);
   }, [toast]);
+
+  const handleLogout = () => {
+    authService.logout();
+    toast({
+      title: "Logged out",
+      description: "You have been successfully logged out",
+    });
+  };
 
   const formatCurrency = (value: number) => {
     return value.toLocaleString("en-US", {
@@ -87,6 +105,10 @@ const Dashboard: React.FC = () => {
             <Button variant="outline" className="rounded-full">
               <Wallet size={18} className="mr-2" />
               Withdraw
+            </Button>
+            <Button variant="destructive" className="rounded-full" onClick={handleLogout}>
+              <LogOut size={18} className="mr-2" />
+              Logout
             </Button>
           </div>
         </div>

@@ -10,6 +10,7 @@ import Trading from "./pages/Trading";
 import Dashboard from "./pages/Dashboard";
 import NotFound from "./pages/NotFound";
 import Auth from "./pages/Auth";
+import ProtectedRoute from "./components/auth/ProtectedRoute";
 
 const queryClient = new QueryClient();
 
@@ -23,9 +24,21 @@ const App = () => (
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/coin/:id" element={<CoinDetails />} />
-            <Route path="/trading" element={<Trading />} />
-            <Route path="/trading/:id" element={<Trading />} />
-            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/trading" element={
+              <ProtectedRoute>
+                <Trading />
+              </ProtectedRoute>
+            } />
+            <Route path="/trading/:id" element={
+              <ProtectedRoute>
+                <Trading />
+              </ProtectedRoute>
+            } />
+            <Route path="/dashboard" element={
+              <ProtectedRoute>
+                <Dashboard />
+              </ProtectedRoute>
+            } />
             <Route path="/market" element={<Index />} />
             <Route path="/auth" element={<Auth />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
