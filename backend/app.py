@@ -7,12 +7,21 @@ import bcrypt
 from datetime import datetime, timedelta
 import os
 from dotenv import load_dotenv
+import requests
+import urllib.parse
+import time
 
 # Load environment variables
 load_dotenv()
 
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "http://localhost:5173"}})
+
+# CoinGecko API base URL
+COINGECKO_API_URL = "https://api.coingecko.com/api/v3"
+
+# CoinCap API base URL
+COINCAP_API_URL = "https://api.coincap.io/v2"
 
 # Database connection
 def get_db_connection():
@@ -224,6 +233,68 @@ def get_user(current_user):
     except Exception as e:
         print(e)
         return jsonify({'message': 'Error fetching user data'}), 500
+
+# CoinGecko API proxy to avoid CORS issues
+@app.route('/api/proxy/coingecko/<path:endpoint>', methods=['GET'])
+def proxy_coingecko(endpoint):
+    try:
+        # Get all query parameters
+        params = request.args.to_dict()
+        
+        # Construct the target URL
+        target_url = f"{COINGECKO_API_URL}/{endpoint}"
+        
+        # Forward the request to CoinGecko
+        response = requests.get(target_url, params=params)
+        
+        # Return the response from CoinGecko
+        return jsonify(response.json()), response.status_code
+    except Exception as e:
+        print(f"Proxy error: {e}")
+        return jsonify({'message': 'Error proxying request to CoinGecko'}), 500
+
+# CoinCap API endpoints
+@app.route('/api/coins')
+def get_coins():
+    try:
+        response = requests.get(f"{COINCAP_API_URL}/assets")
+        return jsonify(response.json())
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+@app.route('/api/coins/<coin_id>')
+def get_coin(coin_id):
+    try:
+        response = requests.get(f"{COINCAP_API_URL}/assets/{coin_id}")
+        return jsonify(response.json())
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+@app.route('/api/coins/<coin_id>/history')
+def get_coin_history(coin_id):
+    try:
+        interval = request.args.get('interval', 'd1')
+        start = request.args.get('start')
+        end = request.args.get('end')
+        
+        params = {
+            'interval': interval,
+            'start': start,
+            'end': end
+        }
+        
+        response = requests.get(f"{COINCAP_API_URL}/assets/{coin_id}/history", params=params)
+        return jsonify(response.json())
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+@app.route('/api/markets')
+def get_markets():
+    try:
+        response = requests.get(f"{COINCAP_API_URL}/markets")
+        return jsonify(response.json())
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 if __name__ == '__main__':
     app.run(debug=True, port=5000)

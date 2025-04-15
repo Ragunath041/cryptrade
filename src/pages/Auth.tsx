@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { GlassCard } from "@/components/ui/glass-card";
 import { useToast } from "@/components/ui/use-toast";
 import { authService } from "@/lib/http";
+import Navbar from '@/components/layout/Navbar';
 
 // API endpoint
 const API_URL = "http://localhost:5000/api";
@@ -16,7 +17,7 @@ interface FormData {
 }
 
 const Auth = () => {
-  const [isLogin, setIsLogin] = useState(true);
+  const [isLogin, setIsLogin] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState<FormData>({
@@ -104,150 +105,71 @@ const Auth = () => {
   };
 
   return (
-    <div className="min-h-screen w-full flex items-center justify-center bg-gradient-to-b from-background to-secondary/20 p-4">
-      <div className="w-full max-w-md">
-        <Button
-          variant="ghost"
-          className="mb-6 text-muted-foreground hover:text-foreground"
-          onClick={() => navigate(-1)}
-        >
-          <ArrowLeft className="h-4 w-4 mr-2" />
-          Back
-        </Button>
-
-        <GlassCard className="p-8" variant="light">
-          <div className="text-center mb-8">
-            <h1 className="text-2xl font-bold mb-2">
-              {isLogin ? "Welcome Back" : "Create Account"}
-            </h1>
-            <p className="text-muted-foreground">
-              {isLogin
-                ? "Enter your credentials to access your account"
-                : "Sign up to start trading cryptocurrencies"}
-            </p>
-          </div>
-
+    <div className="min-h-screen bg-background">
+      <Navbar />
+      
+      <div className="container mx-auto px-4 py-16 mt-16">
+        <div className="max-w-md mx-auto bg-card rounded-lg shadow-lg p-8">
+          <h2 className="text-2xl font-bold text-center mb-6">
+            {isLogin ? 'Welcome Back' : 'Create Account'}
+          </h2>
+          
           <form onSubmit={handleSubmit} className="space-y-4">
             {!isLogin && (
-              <div className="space-y-2">
-                <label className="text-sm font-medium">Username</label>
-                <div className="relative">
-                  <User className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                  <input
-                    type="text"
-                    name="username"
-                    value={formData.username}
-                    onChange={handleInputChange}
-                    placeholder="Enter your username"
-                    className={`w-full pl-10 pr-4 py-2 rounded-lg border ${
-                      errors.username ? "border-red-500" : "border-border"
-                    } bg-background/50 focus:outline-none focus:ring-2 focus:ring-primary/20`}
-                  />
-                </div>
-                {errors.username && (
-                  <p className="text-sm text-red-500">{errors.username}</p>
-                )}
-              </div>
-            )}
-
-            <div className="space-y-2">
-              <label className="text-sm font-medium">Email</label>
-              <div className="relative">
-                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+              <div>
+                <label htmlFor="username" className="block text-sm font-medium mb-1">
+                  Username
+                </label>
                 <input
-                  type="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleInputChange}
-                  placeholder="Enter your email"
-                  className={`w-full pl-10 pr-4 py-2 rounded-lg border ${
-                    errors.email ? "border-red-500" : "border-border"
-                  } bg-background/50 focus:outline-none focus:ring-2 focus:ring-primary/20`}
+                  type="text"
+                  id="username"
+                  className="w-full px-3 py-2 border rounded-md bg-background"
+                  required
                 />
               </div>
-              {errors.email && (
-                <p className="text-sm text-red-500">{errors.email}</p>
-              )}
-            </div>
-
-            <div className="space-y-2">
-              <label className="text-sm font-medium">Password</label>
-              <div className="relative">
-                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                <input
-                  type={showPassword ? "text" : "password"}
-                  name="password"
-                  value={formData.password}
-                  onChange={handleInputChange}
-                  placeholder="Enter your password"
-                  className={`w-full pl-10 pr-10 py-2 rounded-lg border ${
-                    errors.password ? "border-red-500" : "border-border"
-                  } bg-background/50 focus:outline-none focus:ring-2 focus:ring-primary/20`}
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
-                >
-                  {showPassword ? (
-                    <EyeOff className="h-4 w-4" />
-                  ) : (
-                    <Eye className="h-4 w-4" />
-                  )}
-                </button>
-              </div>
-              {errors.password && (
-                <p className="text-sm text-red-500">{errors.password}</p>
-              )}
-            </div>
-
-            {isLogin && (
-              <div className="flex justify-end">
-                <Button
-                  type="button"
-                  variant="link"
-                  className="text-sm text-primary hover:text-primary/80"
-                >
-                  Forgot Password?
-                </Button>
-              </div>
             )}
-
-            <Button
+            
+            <div>
+              <label htmlFor="email" className="block text-sm font-medium mb-1">
+                Email
+              </label>
+              <input
+                type="email"
+                id="email"
+                className="w-full px-3 py-2 border rounded-md bg-background"
+                required
+              />
+            </div>
+            
+            <div>
+              <label htmlFor="password" className="block text-sm font-medium mb-1">
+                Password
+              </label>
+              <input
+                type="password"
+                id="password"
+                className="w-full px-3 py-2 border rounded-md bg-background"
+                required
+              />
+            </div>
+            
+            <button
               type="submit"
-              className="w-full rounded-full bg-primary/90 hover:bg-primary text-primary-foreground py-5"
-              size="lg"
-              disabled={isLoading}
+              className="w-full bg-primary hover:bg-primary/90 text-primary-foreground py-3 rounded-md font-semibold"
             >
-              {isLoading ? (
-                <div className="flex items-center justify-center">
-                  <div className="w-5 h-5 border-2 border-white/20 border-t-white rounded-full animate-spin mr-2" />
-                  {isLogin ? "Signing in..." : "Creating account..."}
-                </div>
-              ) : (
-                isLogin ? "Sign In" : "Create Account"
-              )}
-            </Button>
+              {isLogin ? 'Sign In' : 'Create Account'}
+            </button>
           </form>
-
-          <div className="mt-6 text-center">
-            <p className="text-muted-foreground">
-              {isLogin ? "Don't have an account?" : "Already have an account?"}
-              <Button
-                type="button"
-                variant="link"
-                className="text-primary hover:text-primary/80 ml-1"
-                onClick={() => {
-                  setIsLogin(!isLogin);
-                  setFormData({ username: "", email: "", password: "" });
-                  setErrors({});
-                }}
-              >
-                {isLogin ? "Sign Up" : "Sign In"}
-              </Button>
-            </p>
+          
+          <div className="mt-4 text-center">
+            <button
+              onClick={() => setIsLogin(!isLogin)}
+              className="text-primary hover:underline"
+            >
+              {isLogin ? "Don't have an account? Sign Up" : 'Already have an account? Sign In'}
+            </button>
           </div>
-        </GlassCard>
+        </div>
       </div>
     </div>
   );

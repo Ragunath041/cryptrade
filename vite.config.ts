@@ -10,4 +10,11 @@ export default defineConfig({
       "@": path.resolve(__dirname, "./src"),
     },
   },
+  optimizeDeps: {
+    include: [
+      'react-redux',
+      '@reduxjs/toolkit',
+      'react-error-boundary'
+    ]
+  }
 });
