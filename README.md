@@ -1,73 +1,112 @@
-# Welcome to your Lovable project
+# CrypTrade - Advanced Crypto Trading Platform
 
-## Project info
+CrypTrade is a full-stack cryptocurrency trading platform that enables users to trade digital assets, manage portfolios, and execute binary options trades with real-time market data.
 
-**URL**: https://lovable.dev/projects/f538e621-18ac-40dd-a3a4-014c99966cfb
+## 🚀 Features
 
-## How can I edit this code?
+- Real-time cryptocurrency price tracking
+- Advanced trading interface with TradingView charts
+- Binary options trading
+- Secure user authentication and authorization
+- Portfolio management
+- Real-time trade execution
+- Historical trade analysis
 
-There are several ways of editing your application.
+## 🛠️ Tech Stack
 
-**Use Lovable**
+### Frontend
+- React + TypeScript
+- Vite for build tooling
+- TailwindCSS for styling
+- shadcn/ui for UI components
+- TradingView charts integration
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/f538e621-18ac-40dd-a3a4-014c99966cfb) and start prompting.
+### Backend
+- Django REST Framework
+- PostgreSQL database
+- JWT authentication
+- Coinbase API integration
+- WebSocket for real-time updates
 
-Changes made via Lovable will be committed automatically to this repo.
+## 🔧 Setup & Installation
 
-**Use your preferred IDE**
+### Prerequisites
+- Node.js (v16 or higher)
+- Python 3.9+
+- PostgreSQL
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+### Frontend Setup
+```bash
+# Clone the repository
+git clone https://github.com/Ragunath041/cryptrade.git
+cd cryptrade
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+# Install dependencies
+npm install
 
-Follow these steps:
-
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
+# Start development server
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+### Backend Setup
+```bash
+# Navigate to backend directory
+cd Backend/cryptobackend
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+# Create virtual environment
+python -m venv venv
+source venv/bin/activate  # On Windows use: venv\Scripts\activate
 
-**Use GitHub Codespaces**
+# Install dependencies
+pip install -r requirements.txt
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+# Run migrations
+python manage.py migrate
 
-## What technologies are used for this project?
+# Start server
+python manage.py runserver
+```
 
-This project is built with:
+## 🔐 Environment Variables
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+Create a `.env` file in the backend directory with the following variables:
+```env
+SECRET_KEY=your_django_secret_key
+DEBUG=True
+COINBASE_API_KEY=your_coinbase_api_key
+COINBASE_API_SECRET=your_coinbase_api_secret
+DATABASE_URL=your_database_url
+```
 
-## How can I deploy this project?
+## 📚 API Documentation
 
-Simply open [Lovable](https://lovable.dev/projects/f538e621-18ac-40dd-a3a4-014c99966cfb) and click on Share -> Publish.
+The API documentation is available at `/api/docs/` when running the backend server.
 
-## Can I connect a custom domain to my Lovable project?
+Key endpoints:
+- `/api/auth/` - Authentication endpoints
+- `/api/portfolio/` - Portfolio management
+- `/api/trades/` - Trade execution and history
+- `/api/market/` - Market data and pricing
 
-Yes it is!
+## 🔒 Security
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+- JWT-based authentication
+- Secure API key storage
+- Rate limiting
+- Input validation and sanitization
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+## 📈 Future Improvements
+
+- Add more trading pairs
+- Implement advanced trading strategies
+- Add social trading features
+- Mobile app development
+- Enhanced analytics dashboard
+
+## 📝 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 👥 Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
